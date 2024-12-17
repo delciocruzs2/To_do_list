@@ -4,6 +4,10 @@ from PIL import Image
 
 
 class Application(ctk.CTk):
+    """
+    Frontend of the application contains the graphical settings, such as screen configuration,
+    frames, and buttons, which will render the main graphical interface.
+    """
     
     def __init__(self) -> object:
         self.__root = ctk.CTk()
@@ -16,6 +20,7 @@ class Application(ctk.CTk):
 
 
     def _FullscreenSettings(self) -> object:
+        """ Sensitive graphic settings, such as mode, screen size, icon, etc... """
         self.__root.title('To Do List')
         self.__root.geometry('890x500')
         self.__root.resizable(False,False)
@@ -23,11 +28,13 @@ class Application(ctk.CTk):
         self.__root.iconbitmap('./image/favicon.ico')
 
     def colors(self) -> object:
+        """ Colors for use in the system. """
         self.lavender = '#E6E6FA'
         self.royalBlue = '#4169E1'
         self.darkSlateGray = '#2F4F4F'
 
     def header(self) -> object:
+        """ Regarding the header, this function contains the frame and the presentation logo. """
         # MAIN FRAME
         self.frame_header = ctk.CTkFrame(self.__root, fg_color= self.royalBlue)
         self.frame_header.place(relx=0, rely=0, relwidth=1, relheight=0.13)
@@ -40,53 +47,64 @@ class Application(ctk.CTk):
         sentense.place(relx=0.14, rely=0.1, relwidth=0.52, relheight=0.7)
     
     def nav(self) -> object:
+        """ Navigation buttons for accessing the functionality frames. """
+        # CREATE NAVIGATION FRAME
         self.frame_nav = ctk.CTkFrame(self.__root, fg_color= self.lavender)
         self.frame_nav.place(relx=0, rely=0.13, relwidth=0.25, relheight=0.87)
-
-        self.button_all_ask = ctk.CTkButton(self.frame_nav, text='Mostrar todas tarefas', command=self.all_ask)
-        self.button_all_ask.place(relx=0, rely=0, relwidth=1, relheight=0.2)
-
-        self.button_new_ask = ctk.CTkButton(self.frame_nav, text='Nova tarefas', command=self.new_ask)
-        self.button_new_ask.place(relx=0, rely=0.2, relwidth=1, relheight=0.2)
-
-        self.button_update_ask = ctk.CTkButton(self.frame_nav, text='Atualizar tarefas', command=self.update_ask)
-        self.button_update_ask.place(relx=0, rely=0.4, relwidth=1, relheight=0.2)
-
-        self.button_delete_ask = ctk.CTkButton(self.frame_nav, text='Excluir tarefas', command=self.delete_ask)
-        self.button_delete_ask.place(relx=0, rely=0.6, relwidth=1, relheight=0.2)
-
+        # BUTTON ALL TASK
+        self.button_all_task = ctk.CTkButton(self.frame_nav, text='Mostrar todas tarefas', command=self.all_task)
+        self.button_all_task.place(relx=0, rely=0, relwidth=1, relheight=0.2)
+        # BUTTON NEW TASK
+        self.button_new_task = ctk.CTkButton(self.frame_nav, text='Nova tarefas', command=self.new_task)
+        self.button_new_task.place(relx=0, rely=0.2, relwidth=1, relheight=0.2)
+        # BUTTON UPDATE TASK
+        self.button_update_task = ctk.CTkButton(self.frame_nav, text='Atualizar tarefas', command=self.update_task)
+        self.button_update_task.place(relx=0, rely=0.4, relwidth=1, relheight=0.2)
+        # BUTTON DELETE TASK
+        self.button_delete_task = ctk.CTkButton(self.frame_nav, text='Excluir tarefas', command=self.delete_task)
+        self.button_delete_task.place(relx=0, rely=0.6, relwidth=1, relheight=0.2)
+        # BUTTON ABOUT
         self.button_about = ctk.CTkButton(self.frame_nav, text='About', command=self.about)
         self.button_about.place(relx=0, rely=0.8, relwidth=1, relheight=0.2)
 
-    def all_ask(self) -> object:
-        self.frame_all_ask = ctk.CTkFrame(self.frame_main, fg_color=self.lavender, border_width=3)
-        self.frame_all_ask.place(relx=0, rely=0, relwidth=1, relheight=1)
+    def all_task(self) -> object:
+        """ List all the tasks """
+        self.frame_all_task = ctk.CTkFrame(self.frame_main, fg_color=self.lavender, border_width=3)
+        self.frame_all_task.place(relx=0, rely=0, relwidth=1, relheight=1)
         # text apresentation
-        text_base = ctk.CTkLabel(self.frame_all_ask, text='Todas as tarefas', fg_color=self.darkSlateGray)
+        text_base = ctk.CTkLabel(self.frame_all_task, text='Todas as tarefas', fg_color=self.darkSlateGray)
         text_base.place(relx=0, rely=0, relwidth=1, relheight=0.09)
 
-    def new_ask(self) -> object:
-        self.frame_new_ask = ctk.CTkFrame(self.frame_main, fg_color=self.lavender, border_width=3)
-        self.frame_new_ask.place(relx=0, rely=0, relwidth=1, relheight=1)
+    def new_task(self) -> object:
+        """ Add a new task """
+        # create frame
+        self.frame_new_task = ctk.CTkFrame(self.frame_main, fg_color=self.lavender, border_width=3)
+        self.frame_new_task.place(relx=0, rely=0, relwidth=1, relheight=1)
         # text apresentation
-        text_base = ctk.CTkLabel(self.frame_new_ask, text='Adicionar nova tarefa', fg_color=self.darkSlateGray)
+        text_base = ctk.CTkLabel(self.frame_new_task, text='Adicionar nova tarefa', fg_color=self.darkSlateGray)
         text_base.place(relx=0, rely=0, relwidth=1, relheight=0.09)
     
-    def update_ask(self) -> object:
-        self.frame_update_ask = ctk.CTkFrame(self.frame_main, fg_color=self.lavender, border_width=3)
-        self.frame_update_ask.place(relx=0, rely=0, relwidth=1, relheight=1)
+    def update_task(self) -> object:
+        """ Update a task """
+        # create frame
+        self.frame_update_task = ctk.CTkFrame(self.frame_main, fg_color=self.lavender, border_width=3)
+        self.frame_update_task.place(relx=0, rely=0, relwidth=1, relheight=1)
         # text apresentation
-        text_base = ctk.CTkLabel(self.frame_update_ask, text='Atualizar tarefas', fg_color=self.darkSlateGray)
+        text_base = ctk.CTkLabel(self.frame_update_task, text='Atualizar tarefas', fg_color=self.darkSlateGray)
         text_base.place(relx=0, rely=0, relwidth=1, relheight=0.09)
     
-    def delete_ask(self) -> object:
-        self.frame_delete_ask = ctk.CTkFrame(self.frame_main, fg_color=self.lavender, border_width=3)
-        self.frame_delete_ask.place(relx=0, rely=0, relwidth=1, relheight=1)
+    def delete_task(self) -> object:
+        """ Delete tasks """
+        # create frame
+        self.frame_delete_task = ctk.CTkFrame(self.frame_main, fg_color=self.lavender, border_width=3)
+        self.frame_delete_task.place(relx=0, rely=0, relwidth=1, relheight=1)
         # text apresentation
-        text_base = ctk.CTkLabel(self.frame_delete_ask, text='Deletar tarefas', fg_color=self.darkSlateGray)
+        text_base = ctk.CTkLabel(self.frame_delete_task, text='Deletar tarefas', fg_color=self.darkSlateGray)
         text_base.place(relx=0, rely=0, relwidth=1, relheight=0.09)
     
     def about(self) -> object:
+        """ Presentation about the project, creator, contact, general provisions """
+        # create frame
         self.frame_about = ctk.CTkFrame(self.frame_main, fg_color=self.lavender, border_width=3)
         self.frame_about.place(relx=0, rely=0, relwidth=1, relheight=1)
         # text apresentation
@@ -94,6 +112,7 @@ class Application(ctk.CTk):
         text_base.place(relx=0, rely=0, relwidth=1, relheight=0.09)
 
     def main(self) -> object:
+        # create frame
         self.frame_main = ctk.CTkFrame(self.__root, border_width=3, fg_color= self.lavender)
         self.frame_main.place(relx=0.25, rely=0.13, relwidth=0.75, relheight=0.87)
 
