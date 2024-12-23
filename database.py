@@ -5,6 +5,12 @@ class DataBaseError(Exception):
 
 
 class _DataBase:
+    """
+    SQLite3-based database, which will contain a 'task' table and will be integrated with 
+    the frontend. The database has CRUD options: create, update, delete, and display all results.
+    System methods: create_tables | close_db | __enter__ | __exit__ .
+    CRUD methods: add_data | update_data | delete_data | show_all_data
+    """
 
     # System function -> development
     def __init__(self) -> object:
@@ -17,6 +23,7 @@ class _DataBase:
 
     # System function -> development
     def create_tables(self) -> object:
+        """ Database table creation function """
         try:
             self.__cursor.execute("""CREATE TABLE IF NOT EXISTS task(
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -29,6 +36,7 @@ class _DataBase:
     
     # System function -> development
     def close_db(self) -> None:
+        """ Closed database and Support for the context manager """
         if self.__db:
             try:
                 self.__db.close()
@@ -37,13 +45,16 @@ class _DataBase:
 
     # System function -> development
     def __enter__(self) -> object:
+        """ Support for the context manager """
         return self
         
     # System function -> development
     def __exit__(self, exc_type,exc_value, traceback):
+        """ Support for the context manager """
         self.close_db()
     
     def add_data(self, title:str, description:str):
+        """ Add data to the database """
         try:
             title = title.capitalize()
             description = description.capitalize()
@@ -56,6 +67,7 @@ class _DataBase:
             raise DataBaseError(f'Error adding data: {e}')
      
     def show_all_results(self) -> list:
+        """ Returns a list of tuples with all the data from the database """
         try:
             self.__cursor.execute("""
             SELECT * 
@@ -67,6 +79,8 @@ class _DataBase:
             raise DataBaseError(f'Error displaying all results: {e}')
     
     def update_data(self, id:int, new_title:str, new_description:str) -> None:
+        """ Updates the task data based on the ID, with new_title updating the title 
+        field and new_description updating the description field """
         try:
             self.__cursor.execute("""
             UPDATE task
@@ -80,6 +94,7 @@ class _DataBase:
             raise DataBaseError(f'Error updating data: {e}')
     
     def delete_data(self, id:int):
+        """ Deletes tasks starting from the ID provided as an argument """
         try:
             self.__cursor.execute("""
             DELETE FROM task
