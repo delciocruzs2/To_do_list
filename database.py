@@ -120,7 +120,7 @@ if __name__ == '__main__':
     try:
         with _DataBase() as db:
             #db.add_data('title','description')
-            #db.delete_data('id')
+            #db.delete_data('id)
             #db.update_data('id','new_titile','new_description')
             print(db.show_all_results())
     except RuntimeError as e:
