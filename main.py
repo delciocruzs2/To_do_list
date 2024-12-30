@@ -41,7 +41,8 @@ class Application(ctk.CTk):
     def header(self) -> object:
         """ Regarding the header, this function contains the frame and the presentation logo. """
         # MAIN FRAME
-        self.frame_header = ctk.CTkFrame(self.__root, fg_color= self.orange)
+        self.frame_header = ctk.CTkFrame(self.__root,
+                                        fg_color= self.darkSlateGray)
         self.frame_header.place(relx=0, rely=0, relwidth=1, relheight=0.13)
         # PROCESSING IMAGE
         image_logo = ctk.CTkImage(light_image=Image.open('./image/logo_tarefas.png'),dark_image=Image.open('./image/logo_tarefas.png'), size=(70,50))
@@ -94,16 +95,54 @@ class Application(ctk.CTk):
 
     def all_task(self) -> object:
         """ List all the tasks """
-        self.frame_all_task = ctk.CTkFrame(self.frame_main,
+        self.frame_all_task = ctk.CTkScrollableFrame(self.frame_main,
                                            fg_color=self.lavender,
                                            border_width=3)
         self.frame_all_task.place(relx=0, rely=0, relwidth=1, relheight=1)
 
-        # text apresentation
-        text_base = ctk.CTkLabel(self.frame_all_task,
-                                 text='Todas as tarefas',
-                                 fg_color=self.darkSlateGray)
-        text_base.place(relx=0, rely=0, relwidth=1, relheight=0.09)
+        # Dattabase connection
+        try:
+            with _DataBase() as db:
+                result = db.show_all_results()
+        except DataBaseError:
+            message_error = ctk.CTkLabel(self.frame_all_task,
+                                         text_color= self.darkSlateGray,
+                                         text="Error, algo inesperado aconteceu") 
+            message_error.place(relx=0.25, rely=0.7, relwidth=0.5, relheight=0.2)
+            return
+
+        # structure dict -> id, title, descript
+        dict_results_ = {str(item[0]):[item[1],item[2]] for item in result} 
+
+        list_datas = [['ID','Tarefa','Descrição']]
+
+        for _key, _value in dict_results_.items():
+            data_all_task = [_key,_value[0],_value[1]]
+            list_datas.append(data_all_task)
+        
+        # table
+        for line_index, line in enumerate(list_datas):
+            for column_index, value in enumerate(line):
+                # Define style for header and regular cells
+                bg_color_ = "#F0F8FF" if line_index == 0 else 'white'
+                # Cria cada célula da tabela
+                celula = ctk.CTkLabel(self.frame_all_task,
+                                      text=value,
+                                      corner_radius=4,
+                                      fg_color=bg_color_,
+                                      text_color=self.darkSlateGray,
+                                      padx=10,
+                                      pady=5)
+                # Positions the cell in the grid
+                celula.grid(row=line_index,
+                            column=column_index,
+                            sticky="nsew",
+                            padx=1,
+                            pady=1)
+
+        # Ensures that the columns adjust automatically
+        for coluna in range(len(list_datas[0])):
+                self.frame_all_task.columnconfigure(coluna, weight=1)
 
     def new_task(self) -> object:
         """ Add a new task """
@@ -356,7 +395,7 @@ class Application(ctk.CTk):
                 if _value[0] == value:
                     result_id = _key
                     break
-                
+
             # Check result of selection
             for _key,_value in dict_results_.items():
                 if _value[0] == value:
