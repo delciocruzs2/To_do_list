@@ -356,6 +356,16 @@ class Application(ctk.CTk):
                 if _value[0] == value:
                     result_id = _key
                     break
+                
+            # Check result of selection
+            for _key,_value in dict_results_.items():
+                if _value[0] == value:
+                    result_finale = [_key,_value[0],_value[1]] # title, description
+                    break
+            task_select = ctk.CTkLabel(self.frame_update_task,
+                                  text_color= self.darkSlateGray,
+                                  text=f"""-----  {result_finale[1]}  -----\n\n{result_finale[2]}""") 
+            task_select.place(relx=0.07, rely=0.35, relwidth=0.8, relheight=0.16)
 
             # text new title
             text_update_confirme = ctk.CTkLabel(self.frame_update_task,
