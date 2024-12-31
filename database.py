@@ -17,19 +17,21 @@ class _DataBase:
         try:
             self.__db = sqlite3.connect('TaskDataBase.db') 
             self.__cursor = self.__db.cursor() 
+            self.create_tables()
         except sqlite3.Error as e:
             self.__db = None
             raise DataBaseError(f'Error ao conectar o banco de dados: {e}')
+        
 
     # System function -> development
     def create_tables(self) -> object:
         """ Database table creation function """
         try:
             self.__cursor.execute("""CREATE TABLE IF NOT EXISTS task(
-                                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                title TEXT,
-                                description TEXT
-                                )""")
+                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                 title TEXT,
+                                 description TEXT
+                                 )""")
             self.__db.commit()
         except sqlite3.Error as e:
             raise DataBaseError(f'Error creating the table in the database: {e}')

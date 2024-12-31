@@ -44,10 +44,12 @@ class Application(ctk.CTk):
         self.frame_header = ctk.CTkFrame(self.__root,
                                         fg_color= self.darkSlateGray)
         self.frame_header.place(relx=0, rely=0, relwidth=1, relheight=0.13)
+
         # PROCESSING IMAGE
         image_logo = ctk.CTkImage(light_image=Image.open('./image/logo_tarefas.png'),dark_image=Image.open('./image/logo_tarefas.png'), size=(70,50))
         image = ctk.CTkLabel(self.frame_header, image=image_logo, text= None)
         image.place(relx=0, rely=0.05, relwidth=0.2)
+        
         # MAIN TEXT
         sentense = ctk.CTkLabel(self.frame_header, text='Sistema de gerenciador de tarefas', font=('arial', 30))
         sentense.place(relx=0.14, rely=0.1, relwidth=0.52, relheight=0.7)
@@ -96,8 +98,8 @@ class Application(ctk.CTk):
     def all_task(self) -> object:
         """ List all the tasks """
         self.frame_all_task = ctk.CTkScrollableFrame(self.frame_main,
-                                           fg_color=self.lavender,
-                                           border_width=3)
+                                                     fg_color=self.lavender,
+                                                     border_width=3)
         self.frame_all_task.place(relx=0, rely=0, relwidth=1, relheight=1)
 
         # Dattabase connection
@@ -114,6 +116,7 @@ class Application(ctk.CTk):
         # structure dict -> id, title, descript
         dict_results_ = {str(item[0]):[item[1],item[2]] for item in result} 
 
+        # List-like iterable with values that will be displayed to the user
         list_datas = [['ID','Tarefa','Descrição']]
 
         for _key, _value in dict_results_.items():
@@ -126,43 +129,42 @@ class Application(ctk.CTk):
                 # Define style for header and regular cells
                 bg_color_ = "#F0F8FF" if line_index == 0 else 'white'
                 # Cria cada célula da tabela
-                celula = ctk.CTkLabel(self.frame_all_task,
-                                      text=value,
-                                      corner_radius=4,
-                                      fg_color=bg_color_,
-                                      text_color=self.darkSlateGray,
-                                      padx=10,
-                                      pady=5)
+                cell = ctk.CTkLabel(self.frame_all_task,
+                                    text=value,
+                                    corner_radius=4,
+                                    fg_color=bg_color_,
+                                    text_color=self.darkSlateGray,
+                                    padx=10,
+                                    pady=5)
                 # Positions the cell in the grid
-                celula.grid(row=line_index,
-                            column=column_index,
-                            sticky="nsew",
-                            padx=1,
-                            pady=1)
+                cell.grid(row=line_index,
+                          column=column_index,
+                          sticky="nsew",
+                          padx=1,
+                          pady=1)
 
         # Ensures that the columns adjust automatically
-        for coluna in range(len(list_datas[0])):
-                self.frame_all_task.columnconfigure(coluna, weight=1)
+        for column in range(len(list_datas[0])):
+                self.frame_all_task.columnconfigure(column, weight=1)
 
     def new_task(self) -> object:
         """ Add a new task """
         # create frame
         self.frame_new_task = ctk.CTkFrame(self.frame_main,
-                                          fg_color=self.lavender,
-                                          border_width=3)
+                                           fg_color=self.lavender,
+                                           border_width=3)
         self.frame_new_task.place(relx=0, rely=0, relwidth=1, relheight=1)
 
         # text apresentation
         text_base = ctk.CTkLabel(self.frame_new_task,
-                                fg_color=self.darkSlateGray,
-                                text='Adicionar nova tarefa')
+                                 fg_color=self.darkSlateGray,
+                                 text='Adicionar nova tarefa')
         text_base.place(relx=0, rely=0, relwidth=1, relheight=0.09)
 
         # text title
         text_title = ctk.CTkLabel(self.frame_new_task,
                                   text_color=self.darkSlateGray,
-                                  text='Nome da tarefa:',
-                                  )
+                                  text='Nome da tarefa:')
         text_title.place(relx=0.07, rely=0.1, relwidth=0.14, relheight=0.1)
 
         # Entry title
@@ -269,10 +271,15 @@ class Application(ctk.CTk):
     def about(self) -> object:
         """ Presentation about the project, creator, contact, general provisions """
         # create frame
-        self.frame_about = ctk.CTkFrame(self.frame_main, fg_color=self.lavender, border_width=3)
+        self.frame_about = ctk.CTkFrame(self.frame_main,
+                                        fg_color=self.lavender,
+                                        border_width=3)
         self.frame_about.place(relx=0, rely=0, relwidth=1, relheight=1)
+
         # text apresentation
-        text_base = ctk.CTkLabel(self.frame_about, text='About', fg_color=self.darkSlateGray)
+        text_base = ctk.CTkLabel(self.frame_about,
+                                 text='About', 
+                                 fg_color=self.darkSlateGray)
         text_base.place(relx=0, rely=0, relwidth=1, relheight=0.09)
 
     def main(self) -> object:
@@ -285,7 +292,7 @@ class Application(ctk.CTk):
         if not title or not description:
                 message_error = ctk.CTkLabel(self.frame_new_task,
                                              text_color= self.darkSlateGray,
-                                            text="""Error ao adicionar tarefa\nOs campos não podem está vazios""") 
+                                             text="""Error ao adicionar tarefa\nOs campos não podem está vazios""") 
                 message_error.place(relx=0.25, rely=0.7, relwidth=0.5, relheight=0.2)
                 self.frame_new_task.after(3000, lambda: message_error.destroy())
                 return
@@ -294,8 +301,8 @@ class Application(ctk.CTk):
             with _DataBase() as db:
                 db.add_data(title, description)
             message_check = ctk.CTkLabel(self.frame_new_task,
-                                        text_color=self.darkSlateGray,
-                                        text='Adicionado com sucesso') 
+                                         text_color=self.darkSlateGray,
+                                         text='Adicionado com sucesso') 
             message_check.place(relx=0.25, rely=0.7, relwidth=0.5, relheight=0.2)
         except DataBaseError:
             message_error = ctk.CTkLabel(self.frame_new_task,
@@ -383,11 +390,11 @@ class Application(ctk.CTk):
 
             # button confirme
             button_update_confirme = ctk.CTkButton(self.frame_update_task,
-                                    border_width=1,
-                                    fg_color=self.lime,
-                                    text_color=self.black,
-                                    text='confirmar',
-                                    command= lambda: self.update_commit(id_finally,new_title_entry.get(),new_description_entry.get()))
+                                                   border_width=1,
+                                                   fg_color=self.lime,
+                                                   text_color=self.black,
+                                                   text='confirmar',
+                                                   command= lambda: self.update_commit(id_finally,new_title_entry.get(),new_description_entry.get()))
             button_update_confirme.place(relx=0.35, rely=0.64, relwidth=0.26, relheight=0.06)
         else:
             # defining id
@@ -401,9 +408,10 @@ class Application(ctk.CTk):
                 if _value[0] == value:
                     result_finale = [_key,_value[0],_value[1]] # title, description
                     break
+
             task_select = ctk.CTkLabel(self.frame_update_task,
-                                  text_color= self.darkSlateGray,
-                                  text=f"""-----  {result_finale[1]}  -----\n\n{result_finale[2]}""") 
+                                       text_color= self.darkSlateGray,
+                                       text=f"""-----  {result_finale[1]}  -----\n\n{result_finale[2]}""") 
             task_select.place(relx=0.07, rely=0.35, relwidth=0.8, relheight=0.16)
 
             # text new title
@@ -428,17 +436,17 @@ class Application(ctk.CTk):
 
             # text confirme
             text_update_confirme = ctk.CTkLabel(self.frame_update_task,
-                                                    text_color=self.darkSlateGray,
-                                                    text=f'Confirme para editar tarefa')
+                                                text_color=self.darkSlateGray,
+                                                text=f'Confirme para editar tarefa')
             text_update_confirme.place(relx=0.07, rely=0.63, relwidth=0.23, relheight=0.08)
 
             # button confirme
             button_update_confirme = ctk.CTkButton(self.frame_update_task,
-                                    border_width=1,
-                                    fg_color=self.lime,
-                                    text_color=self.black,
-                                    text='confirmar',
-                                    command= lambda: self.update_commit(result_id,new_title_entry.get(),new_description_entry.get()))
+                                                   border_width=1,
+                                                   fg_color=self.lime,
+                                                   text_color=self.black,
+                                                   text='confirmar',
+                                                   command= lambda: self.update_commit(result_id,new_title_entry.get(),new_description_entry.get()))
             button_update_confirme.place(relx=0.35, rely=0.64, relwidth=0.26, relheight=0.06)         
 
     def update_commit(self,_id:str ,new_title:str, new_description:str) -> None:
@@ -447,8 +455,8 @@ class Application(ctk.CTk):
         # conditional vereficy
         if not new_title or not new_description:
             message_error = ctk.CTkLabel(self.frame_update_task,
-                                        text_color= self.darkSlateGray,
-                                        text="Error ao atualizar tarefa\nParametros vazios") 
+                                         text_color= self.darkSlateGray,
+                                         text="Error ao atualizar tarefa\nParametros vazios") 
             message_error.place(relx=0.25, rely=0.7, relwidth=0.5, relheight=0.2)
             self.frame_update_task.after(2500, lambda: message_error.destroy())
             return
@@ -457,13 +465,13 @@ class Application(ctk.CTk):
                 with _DataBase() as db:
                     db.update_data(_id,new_title,new_description)
                 message_ = ctk.CTkLabel(self.frame_update_task,
-                                            text_color= self.darkSlateGray,
-                                            text="Atualizado com sucesso") 
+                                        text_color= self.darkSlateGray,
+                                        text="Atualizado com sucesso") 
                 message_.place(relx=0.25, rely=0.74, relwidth=0.5, relheight=0.2)
             except DataBaseError:
                 message_error = ctk.CTkLabel(self.frame_update_task,
-                                            text_color= self.darkSlateGray,
-                                            text="Error ao atualizar tarefa") 
+                                             text_color= self.darkSlateGray,
+                                             text="Error ao atualizar tarefa") 
                 message_error.place(relx=0.25, rely=0.7, relwidth=0.5, relheight=0.2)
             finally:
                 self.frame_update_task.after(2500, self.update_task)
@@ -471,6 +479,7 @@ class Application(ctk.CTk):
     def delete_source(self, value) -> None:
         """ the function must handle the parameter selected by the user, and return 
         to the delete_commit function the real id to be deleted """
+
         # error verefication
         if not value or value not in self.list_titles:
             message_error = ctk.CTkLabel(self.frame_delete_task,
@@ -500,8 +509,8 @@ class Application(ctk.CTk):
         # conditional on quantity of tasks -> referent temporary list
         if len(temporary_list) > 1 :
             message_ = ctk.CTkLabel(self.frame_delete_task,
-                                         text_color= self.darkSlateGray,
-                                         text=f'Existem {len(temporary_list)} tarefas com esse nome\ndefina a tarefa que deseja excluir') 
+                                    text_color= self.darkSlateGray,
+                                    text=f'Existem {len(temporary_list)} tarefas com esse nome\ndefina a tarefa que deseja excluir') 
             message_.place(relx=0.25, rely=0.35, relwidth=0.5, relheight=0.2)
 
             # combobox to list
@@ -513,7 +522,7 @@ class Application(ctk.CTk):
 
             # ComboBox with ID, keys, and values
             id_combobox= ctk.CTkComboBox(self.frame_delete_task,
-                                              values= list_values)
+                                         values= list_values)
             id_combobox.place(relx=0.07, rely=0.51, relwidth= 0.8, relheight=0.08)
             id_finally = id_combobox.get()
             id_finally = id_finally[:4]
@@ -526,11 +535,11 @@ class Application(ctk.CTk):
 
             # button confirme
             button_delete_confirme = ctk.CTkButton(self.frame_delete_task,
-                                      border_width=1,
-                                      fg_color=self.grey,
-                                      text_color=self.black,
-                                      text='confirmar',
-                                      command= lambda: self.delete_commit(id_finally))
+                                                   border_width=1,
+                                                   fg_color=self.grey,
+                                                   text_color=self.black,
+                                                   text='confirmar',
+                                                   command= lambda: self.delete_commit(id_finally))
             button_delete_confirme.place(relx=0.35, rely=0.68, relwidth=0.26, relheight=0.06)
 
 
@@ -540,8 +549,8 @@ class Application(ctk.CTk):
                     result_finale = [_key,_value[0],_value[1]] # title, description
                     break
             task_select = ctk.CTkLabel(self.frame_delete_task,
-                                  text_color= self.darkSlateGray,
-                                  text=f"""-----  {result_finale[1]}  -----\n\n{result_finale[2]}""") 
+                                       text_color= self.darkSlateGray,
+                                       text=f"""-----  {result_finale[1]}  -----\n\n{result_finale[2]}""") 
             task_select.place(relx=0.07, rely=0.4, relwidth=0.8, relheight=0.2)
 
             # text confirme
@@ -552,11 +561,11 @@ class Application(ctk.CTk):
 
             # button confirme
             button_delete_confirme = ctk.CTkButton(self.frame_delete_task,
-                                      border_width=1,
-                                      fg_color=self.grey,
-                                      text_color=self.black,
-                                      text='confirmar',
-                                      command= lambda: self.delete_commit(result_finale[0]))
+                                                   border_width=1,
+                                                   fg_color=self.grey,
+                                                   text_color=self.black,
+                                                   text='confirmar',
+                                                   command= lambda: self.delete_commit(result_finale[0]))
             button_delete_confirme.place(relx=0.35, rely=0.68, relwidth=0.26, relheight=0.06)
         
     def delete_commit(self, value:str) -> None:
