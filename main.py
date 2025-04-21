@@ -26,7 +26,6 @@ class Application(ctk.CTk):
         self.__root.geometry('890x500')
         self.__root.resizable(False,False)
         self.__root._set_appearance_mode('light')
-        self.__root.iconbitmap('./image/favicon.ico')
 
     def colors(self) -> object:
         """ Colors for use in the system. """
